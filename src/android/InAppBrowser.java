@@ -950,8 +950,8 @@ public class InAppBrowser extends CordovaPlugin {
                 settings.setPluginState(android.webkit.WebSettings.PluginState.ON);
 
                 try {
-                    // 强制关闭 webview 深色主题模式
-                    settings.setForceDark(WebSettings.FORCE_DARK_OFF);
+                    // webview 深色主题模式 跟随系统
+                    settings.setForceDark(WebSettings.FORCE_DARK_AUTO);
                 } catch (Exception e) {
                     LOG.e(LOG_TAG, "setForceDark error.", e.getMessage());
                 }
