@@ -948,6 +948,13 @@ public class InAppBrowser extends CordovaPlugin {
                 settings.setJavaScriptCanOpenWindowsAutomatically(true);
                 settings.setBuiltInZoomControls(showZoomControls);
                 settings.setPluginState(android.webkit.WebSettings.PluginState.ON);
+
+                try {
+                    // 强制关闭 webview 深色主题模式
+                    settings.setForceDark(WebSettings.FORCE_DARK_AUTO);
+                } catch (Exception e) {
+                    LOG.e(LOG_TAG, "setForceDark error.", e.getMessage());
+                }
                 
                 // download event
                 
