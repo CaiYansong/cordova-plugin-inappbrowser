@@ -27,6 +27,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Parcelable;
 import android.provider.Browser;
 import android.content.res.Resources;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.Color;
@@ -83,6 +84,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+
+import android.widget.Toast;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class InAppBrowser extends CordovaPlugin {
@@ -950,8 +953,12 @@ public class InAppBrowser extends CordovaPlugin {
                 settings.setPluginState(android.webkit.WebSettings.PluginState.ON);
 
                 try {
-                    // 强制关闭 webview 深色主题模式
+                  // 判断 webview 深色、浅色主题模式
+                  if (getDarkModeStatus(cordova.getContext())) {
+                    settings.setForceDark(WebSettings.FORCE_DARK_ON);
+                  } else {
                     settings.setForceDark(WebSettings.FORCE_DARK_OFF);
+                  }
                 } catch (Exception e) {
                     LOG.e(LOG_TAG, "setForceDark error.", e.getMessage());
                 }
@@ -1493,5 +1500,12 @@ public class InAppBrowser extends CordovaPlugin {
             // By default handle 401 like we'd normally do!
             super.onReceivedHttpAuthRequest(view, handler, host, realm);
         }
+    }
+
+    // 检查当前系统是否已开启暗黑模式
+    public boolean getDarkModeStatus(Context context) {
+        int mode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        // Night mode is active, we're using dark theme
+        return mode == Configuration.UI_MODE_NIGHT_YES;
     }
 }
